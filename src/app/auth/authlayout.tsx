@@ -11,8 +11,7 @@ const Layout = async ({ children }: Props) => {
   const user = await currentUser()
   console.log("user name is ", user)
   if (user) redirect('/')
-  return
-  (
+  return(
     <div className='h-screen flex w-full justify-center'>
       <div className='w-[600]px ld:w-full flext-col items-start p-6'>
         <Image

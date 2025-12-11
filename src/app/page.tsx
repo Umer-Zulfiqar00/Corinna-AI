@@ -1,73 +1,93 @@
-const people = [
-  {
-    name: 'Leslie Alexander',
-    role: 'Co-Founder / CEO',
-    imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-  {
-    name: 'Michael Foster',
-    role: 'Co-Founder / CTO',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-  {
-    name: 'Dries Vincent',
-    role: 'Business Relations',
-    imageUrl:
-      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-  {
-    name: 'Lindsay Walton',
-    role: 'Front-end Developer',
-    imageUrl:
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-  {
-    name: 'Courtney Henry',
-    role: 'Designer',
-    imageUrl:
-      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-  {
-    name: 'Tom Cook',
-    role: 'Director of Product',
-    imageUrl:
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-]
+import NavBar from "@/components/navbar";
+import { Button } from "@/components/ui/button";
+import clsx from "clsx";
+import { ArrowRightCircleIcon, Check } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { pricingCards } from "@/constants/landing-page";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { features } from "process";
 
-export default function Example() {
-  return (
-    <div className="bg-white py-24 sm:py-32">
-      <div className="mx-auto grid max-w-7xl gap-20 px-6 lg:px-8 xl:grid-cols-3">
-        <div className="max-w-xl">
-          <h2 className="text-pretty text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl">
-            Meet our leadership
-          </h2>
-          <p className="mt-6 text-lg/8 text-gray-600">
-            We’re a dynamic group of individuals who are passionate about what we do and dedicated to delivering the
-            best results for our clients.
-          </p>
+
+export default function Home(){
+  return(
+    <main>
+      <NavBar/>
+      <section>
+        <div className="flex items-center justify-center flex-col mt-[80px] gap-4">
+          <span className="text-orange bg-orange/20 px-4 py-2">
+          An AI Powered sales assistant chatbot</span>
+          <Image
+          src='/images/corinna-ai-logo.png'
+          width={500}
+          height={100}
+          alt="logo"
+          className="max-w-lg object-contain"
+        />
+        <p className="text-center max-w-[500px]">
+          Your AI powered sales assistant! Embed Corinna AI into any website
+           with just a snippet of code!
+        </p>
+        <Button className="bg-orange font-bold text-white px-4">
+          Start for Free
+        </Button>
+        <Image
+        src='/images/iphonecorinna.png'
+        width={400}
+        height={100}
+        alt="logo"
+        className=" max-w-lg object-contain"
+        />
         </div>
-        <ul role="list" className="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2">
-          {people.map((person) => (
-            <li key={person.name}>
-              <div className="flex items-center gap-x-6">
-                <img
-                  alt=""
-                  src={person.imageUrl}
-                  className="size-16 rounded-full outline outline-1 -outline-offset-1 outline-black/5"
-                />
-                <div>
-                  <h3 className="text-base/7 font-semibold tracking-tight text-gray-900">{person.name}</h3>
-                  <p className="text-sm/6 font-semibold text-indigo-600">{person.role}</p>
-                </div>
+      </section>
+      <section className="flex justify-center items-center flex-col gap-4 mt-10">
+      <h2 className="text-4xl text-center">Choose What fits you right</h2>    
+      <p className="text-muted-foreground text-center max-w-lg">
+        Our Starightforward pricing plans are tailored to meet your needs. If
+        {"you're"} not ready to commit you can get started for free.
+      </p>
+      </section>
+      <div className=" flex justify-center gap-4 flex-wrap mt-6">
+        {pricingCards.map((card)=>(
+          <Card key={card.title}
+          className={clsx('w-[300px] flex flex-col justify-between',{
+            'border-2 border-primary': card.title==='unlimited',
+          })}
+          >
+            <CardHeader>
+              <CardTitle className="text-orange">{card.title}</CardTitle>
+                <CardDescription>
+                  {pricingCards.findLast((c)=>c.title === card.title)?.description}
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <span className="text-4xl font-bold">{card.price}</span>
+              <span className="text-muted-foreground">
+                <span>/month</span>
+              </span>
+            </CardContent>
+            <CardFooter className="flex flex-col items-start gap-4">
+              <div>
+                {card.features.map((feature)=>(
+                  <div
+                   key={feature}
+                   className="flex gap-2"
+                   >
+                    <Check/>
+                    <p>{feature}</p>
+                    </div>
+                ))}
               </div>
-            </li>
-          ))}
-        </ul>
+              <Link
+              href={`/dashboad?plan=${card.title}`}
+              className="bg-[#f3d299] border-orange border-2 p-2 w-full text-center font-bold rounded-md"
+              >
+                Get Started
+              </Link>
+            </CardFooter>
+          </Card>
+        ))}
       </div>
-    </div>
+    </main>
   )
 }
