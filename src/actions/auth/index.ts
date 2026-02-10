@@ -39,9 +39,6 @@ export const onLoginUser = async () => {
     if (!user)  //  redirectToSignIn()
     {  return redirectToSignIn({ returnBackUrl: "http://localhost:3000/sign-in" });
 }
-       
-        
-
     else {
         try {
             const authenticated = await client.user.findUnique({

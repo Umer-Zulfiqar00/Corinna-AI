@@ -2,7 +2,7 @@ type UserRegistraionProps={
     id:string,
     type:'email'|'text'|'password'
     inputType:'select'|'input'
-    options?:{value:string; label:string; id:string}[]
+    options?:{value:string; label:string; id:string }[]
     label?:string
     placeholder:string
     name:string
@@ -47,13 +47,15 @@ export const USER_REGISTRATION_FORM: UserRegistraionProps[]=[
 
 ]
 export const USER_LOGIN_FORM: UserRegistraionProps[]=[
-   { id:'1',
+   { 
+    id:'1',
         inputType:'input',
         placeholder:'Enter your email',
         name:'email',
         type:'email',
    },
-{id:'2',
+{
+    id:'2',
     inputType:'input',
     placeholder:'Password',
     name:'Password',

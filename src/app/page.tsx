@@ -82,7 +82,7 @@ export default function Home(){
               href={`/dashboad?plan=${card.title}`}
               className="bg-[#f3d299] border-orange border-2 p-2 w-full text-center font-bold rounded-md"
               >
-                Get Started
+              Get Started
               </Link>
             </CardFooter>
           </Card>

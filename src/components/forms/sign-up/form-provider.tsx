@@ -18,6 +18,13 @@ const SignUpFormProvider = ({ children }: Props) => {
           onSubmit={onHandleSubmit}
           className="h-full"
         >
+        {/* <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            console.log('🔥 Native form submit fired')
+            onHandleSubmit(e)
+          }}
+        > */}
           <div className='flex flex-col justify-between gap-3 h-full'>
             <Loader loading={loading}>{children}</Loader>
           </div>

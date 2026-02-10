@@ -1,11 +1,9 @@
-import { features } from "process";
-
 export const pricingCards=[
     {
-        title:'Starter',
+        title:'Standard',
         description:'Perfect for trying out Corinna AI',
         price:'$0',
-        duration:'month',
+        duration:'',
         highlight:'Key features',
         features:['1 domain','10 contacts', '10 Emails per month'],
         priceId:'',

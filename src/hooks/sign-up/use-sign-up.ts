@@ -1,12 +1,11 @@
 'use client'
 import { useToast } from "@/components/ui/use-toast"
-// import { useToast } from "../use-toast"
 import {
     UserRegistraionProps,
     UserRegistraionSchema
 } from "@/schemas/auth.schema"
 import { zodResolver } from '@hookform/resolvers/zod'
-import { SignUp, useSignUp } from "@clerk/nextjs"
+import { useSignUp } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from 'react-hook-form'
@@ -15,7 +14,7 @@ import { onCompleteUserRegistration } from "@/actions/auth"
 export const useSignUpForm = () => {
     const { toast } = useToast()
     const [loading, setLoading] = useState<boolean>(false)
-    const { isLoaded, signUp, setActive } = useSignUp()
+    const { signUp, isLoaded, setActive } = useSignUp()
     const router = useRouter()
     const methods = useForm<UserRegistraionProps>({
         resolver: zodResolver(UserRegistraionSchema),
@@ -29,8 +28,9 @@ export const useSignUpForm = () => {
         email: string,
         password: string,
         onNext: React.Dispatch<React.SetStateAction<number>>
-     ) => {
+    ) => {
         if (!isLoaded) return
+        console.log('isLoaded:', isLoaded)
 
         try {
             await signUp.create({
@@ -39,7 +39,6 @@ export const useSignUpForm = () => {
             })
 
             await signUp.prepareEmailAddressVerification({ strategy: 'email_code' })
-
             onNext((prev) => prev + 1)
             alert('running')
         } catch (error: any) {
@@ -49,12 +48,13 @@ export const useSignUpForm = () => {
             })
         }
     }
-
-
+    
     const onHandleSubmit = methods.handleSubmit(
+        
         async (values: UserRegistraionProps) => {
+        
             if (!isLoaded) return
-                 try {
+                try {
                 setLoading(true)
                 const completeSignup = await signUp.attemptEmailAddressVerification({
                     code: values.otp,
@@ -78,7 +78,7 @@ export const useSignUpForm = () => {
                             session: completeSignup.createdSessionId,
                         })
 
-                        setLoading(true)
+                        setLoading(false)
                         router.push('/dashboard')
                     }
 
@@ -92,7 +92,7 @@ export const useSignUpForm = () => {
             } catch (error: any) {
                 toast({
                     title: 'Error',
-                    description: error.error[0].longMessage,
+                    description: error.errors[0].longMessage,
                 })
             }
         }

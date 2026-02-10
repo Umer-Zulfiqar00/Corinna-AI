@@ -11,17 +11,20 @@ const InitialValues: InitialValuesProps = {
     setCurrentStep: () => undefined,
 }
 const authContext = React.createContext(InitialValues)
+
 const { Provider } = authContext
+
 export const AuthContextProvider = ({
     children,
 }: {
     children: React.ReactNode
 }) => {
     const [currentStep, setCurrentStep] = useState<number>(
-        InitialValues.currentStep)
+        InitialValues.currentStep
+    )
     const values = {
         currentStep,
-        setCurrentStep
+        setCurrentStep,
     }
     return <Provider value={values}>{children}</Provider>
 }

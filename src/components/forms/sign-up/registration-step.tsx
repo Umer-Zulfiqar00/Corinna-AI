@@ -1,23 +1,23 @@
-'use client';
+'use client'  // Mark the component as a Client Component
+import React, { useState , useEffect} from 'react'
+import dynamic from 'next/dynamic'
 import { useAuthContextHook } from '@/context/use-auth-context'
-import React, { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import TypeSelectionForm from './type-selection-form';
-import dynamic from 'next/dynamic';
-import { Spinner } from '@/components/spinner';
+import TypeSelectionForm from './type-selection-form'
+import { Spinner } from '@/components/spinner'
+
+const LoadingSpinner = () => <Spinner noPadding={false} />
 
 const DetailForm = dynamic(() => import('./account-details-form'), {
   ssr: false,
-  // loading: Spinner, 
-  loading:()=> <Spinner/>,
+  loading: LoadingSpinner,
 })
 
-const OTPForm=dynamic(()=>import('./otp-form'),{
-  ssr:false,
-  // loading:Spinner,
-    loading:()=> <Spinner/>,
-
+const OTPForm = dynamic(() => import('./otp-form'), {
+  ssr: false,
+  loading: LoadingSpinner,
 })
+
 type Props = {}
 
 const RegistrationFormStep = (props: Props) => {
@@ -26,13 +26,20 @@ const RegistrationFormStep = (props: Props) => {
     formState: { errors },
     setValue,
   } = useFormContext()
-  const { currentStep } = useAuthContextHook();
+  const { currentStep } = useAuthContextHook()
   const [onOTP, setOnOTP] = useState<string>('')
   const [onUserType, setOnUserType] = useState<'owner' | 'student'>('owner')
 
+  // setValue('otp', onOTP)
+  //  ai code
+    // ✅ FIX
+  useEffect(() => {
+  if (onOTP) {
+    setValue('otp', onOTP, { shouldValidate: true })
+  }
+}, [onOTP, setValue])
 
-  setValue('otp', onOTP)
-  console.log('currentStep value after click is= ', currentStep)
+
   switch (currentStep) {
     case 1:
       return (
@@ -56,11 +63,9 @@ const RegistrationFormStep = (props: Props) => {
           setOTP={setOnOTP}
         />
       )
-
   }
-  return (
-    <div>RegistrationFormStep</div>
-  )
+
+  return <div>RegistrationFormStep</div>
 }
 
 export default RegistrationFormStep

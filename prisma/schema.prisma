@@ -31,7 +31,7 @@ model Domain {
     filterQuestions FilterQuestions[]
 
     customer Customer[]
-    user     User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    User     User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId   String?    @db.Uuid
 }
 
@@ -62,8 +62,8 @@ model HelpDesk {
 
 model FilterQuestions {
     id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    question String
-    answered  String
+    question  String
+    answered  String?
 
     Domain   Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
     domainId String? @db.Uuid
@@ -71,8 +71,8 @@ model FilterQuestions {
 
 model CustomerResponses {
     id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    question  String
-    answered   String
+    question   String
+    answered   String?
     customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
     customerId String   @db.Uuid
 }
@@ -82,8 +82,8 @@ model Customer {
     email     String?
     questions CustomerResponses[]
     chatRoom  ChatRoom[]
-    Domain    Domain?@relation(fields: [domainId], references: [id], onDelete: Cascade)
-    domainId  String?             @db.Uuid
+    Domain    Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
+    domainId  String? @db.Uuid
 }
 
 model ChatRoom {

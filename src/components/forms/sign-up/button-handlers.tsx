@@ -9,28 +9,31 @@ import { useFormContext } from 'react-hook-form'
 type Props = {}
 
 const ButtonHandler = (props: Props) => {
-  const { currentStep, setCurrentStep } = useAuthContextHook()
+  const { setCurrentStep, currentStep } = useAuthContextHook()
   const { formState, getFieldState, getValues } = useFormContext()
   const { onGenerateOTP } = useSignUpForm()
 
-  const { isDirty: isName } = getFieldState('fullname')
-  const { isDirty: isEmail } = getFieldState('email')
-  const { isDirty: isPassword } = getFieldState('password')
+  const { isDirty: isName } = getFieldState('fullname', formState)
+  const { isDirty: isEmail } = getFieldState('email', formState)
+  const { isDirty: isPassword } = getFieldState('password', formState)
 
   if (currentStep === 3) {
+
     return (
-      <div className='w-full flex flex-col gap-3 items-center'>
+      <div className="w-full flex flex-col gap-3 items-center">
         <Button
-          type='submit'
-          className='w-full'
+          type="submit"
+          className="w-full"
+          
         >
-          Cerate an account
+          Create an account
+          
         </Button>
         <p>
           Already have an account?
           <Link
-            href='/auth/sign-in'
-            className='font-bold'
+            href="/auth/sign-in"
+            className="font-bold"
           >
             Sign In
           </Link>
@@ -41,10 +44,10 @@ const ButtonHandler = (props: Props) => {
 
   if (currentStep === 2) {
     return (
-      <div className='w-full flex flex-col gap-3 items-center'>
+      <div className="w-full flex flex-col gap-3 items-center">
         <Button
-          type='submit'
-          className='w-full'
+          type="submit"
+          className="w-full"
           {...(isName &&
             isEmail &&
             isPassword && {
@@ -68,28 +71,29 @@ const ButtonHandler = (props: Props) => {
           </Link>
         </p>
       </div>
-    )  
-  }
-
-    return (
-      <div className='w-full flex flex-col gap-3 items-center'>
-        <Button
-        type='button'
-        className='w-full'
-        onClick={()=> setCurrentStep((prev:number)=> prev+1)}
-        >
-          Continue
-        </Button>
-        <p>
-          Already have an account?{" "}
-          <Link
-            href="/auth/sign-in"
-            className="font-bold"
-          >
-            Sign In
-          </Link>
-        </p>
-      </div>
     )
   }
-  export default ButtonHandler
+
+  return (
+    <div className="w-full flex flex-col gap-3 items-center">
+      <Button
+        type="submit"
+        className="w-full"
+        onClick={() => setCurrentStep((prev: number) => prev + 1)}
+      >
+        Continue
+      </Button>
+      <p>
+        Already have an account?{' '}
+        <Link
+          href="/auth/sign-in"
+          className="font-bold"
+        >
+          Sign In
+        </Link>
+      </p>
+    </div>
+  )
+}
+
+export default ButtonHandler

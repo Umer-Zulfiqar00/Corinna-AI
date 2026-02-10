@@ -10,7 +10,7 @@ const HighlightBar = (props: Props) => {
   
   return (
     <div
-    className='grid grid-cols-3 gap-3'>
+    className="grid grid-cols-3 gap-3">
     <div className={cn(
       'rounded-full h-2 col-span-1',
       currentStep==1?'bg-orange':
