@@ -10,7 +10,8 @@ import {
 import { Section } from '@/components/section-label'
 import FormGenerator from '../form-generator'
 import { Button } from '@/components/ui/button'
-
+import { Loader } from '@/components/loader'
+import Accordion from '@/components/accordion'
 type Props = {
     id:string
 }
@@ -65,6 +66,21 @@ const HelpDesk = ({id}: Props) => {
                 Create
             </Button>
             </form>
+        </CardContent>
+        <CardContent className='p-6 overflow-y-auto chat-window'>
+            <Loader loading={loading}>
+                {isQuestions.length ? (
+                    isQuestions.map((question)=>(
+                        <Accordion
+                        key={question.id}
+                        trigger={question.question}
+                        content={question.answer}
+                        />
+                    ))
+                ):(
+                    <CardDescription>No Question to show</CardDescription>
+                )}
+            </Loader>
         </CardContent>
     </Card>
   )

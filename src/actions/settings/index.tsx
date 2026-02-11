@@ -2,6 +2,7 @@
 import { client } from "@/lib/prisma"
 // import { clerkClient, currentUser } from "@clerk/nextjs"
 import { clerkClient, currentUser } from "@clerk/nextjs/server"
+import { FilterQuestions } from "@prisma/client"
 
 export const onIntegrateDomain = async (domain: string, icon: string) => {
     const user = await currentUser()
@@ -391,25 +392,89 @@ export const onCreateHelpDeskQuestion = async (
         console.log(error)
     }
 }
-export const onGetAllHelpDeskQuestions=async (id:string)=>{
-    try{
-        const questions= await client.helpDesk.findMany({
+export const onGetAllHelpDeskQuestions = async (id: string) => {
+    try {
+        const questions = await client.helpDesk.findMany({
+            where: {
+                domainId: id,
+            },
+            select: {
+                question: true,
+                answer: true,
+                id: true,
+            },
+        })
+
+        return {
+            status: 200,
+            message: 'New help desk questions added',
+            questions: questions,
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const onCreateFilterQuestions = async (id: string, question: string) => {
+    try {
+        const filterQuestion = await client.domain.update({
+            where: {
+                id,
+                },
+            data: {
+                filterQuestions: {
+                    create: {
+                        question,
+                    },
+                },
+            },
+            include: {
+                filterQuestions: {
+                    select: {
+                        id: true,
+                        question: true,
+                    },
+                },
+            },
+        })
+
+        if (filterQuestion) {
+            return {
+                status: 200,
+                message: 'Filter question added',
+                questions: filterQuestion.filterQuestions,
+            }
+        }
+        return {
+            status: 400,
+            message: 'Oops! something went wrong',
+        }
+        } catch (error) {
+        console.log(error)
+    }
+}
+
+export const onGetAllFilterQuestions = async(id:string)=>{
+    console.log("fetching questions for id",id)
+    try {
+        const questions= await client.filterQuestions.findMany({
             where:{
                 domainId:id,
             },
             select:{
                 question:true,
-                answer:true,
                 id:true,
+            },
+            orderBy:{
+                question:'asc',
             },
         })
 
         return {
             status:200,
-            message:'New help desk questions added',
+            message:'',
             questions:questions,
         }
-    }catch(error){
+    } catch (error) {
         console.log(error)
     }
 }
