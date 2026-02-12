@@ -82,8 +82,8 @@ export const HelpDeskQuestionsSchema=z.object({
     answer:z.string().min(1,{message:'Question cannot be left empty'})   
 })
 
-export const FielterQuestionsSchema = z.object({
-    questions:z.string().min(1,{message:'Question cannot be left empty'}),
+export const FilterQuestionsSchema = z.object({
+    question:z.string().min(1,{message:'Question cannot be left empty'}),
 })
 
 export const AddProductSchema=z.object({

@@ -11,7 +11,7 @@ import { onChatBotImageUpdate, onCreateFilterQuestions, onCreateHelpDeskQuestion
 import {
     DomainsSettingsProps,
     DomainsSettingsSchema,
-    FielterQuestionsSchema,
+    FilterQuestionsSchema,
     FilterQuestionsProps,
     HelpDeskQuestionsProps,
     HelpDeskQuestionsSchema,
@@ -160,29 +160,39 @@ export const useHelpDesk = (id: string) => {
         { id: string; question: string; answer: string }[]
     >([])
     const onSubmitQuestion = handleSubmit(async (values) => {
-        setLoading(true)
-        const question = await onCreateHelpDeskQuestion(
-            id,
-            values.questions,
-            values.answer
-        )
-        if (question) {
-            setIsQuestions(question.questions!)
-            toast({
-                title: question.status == 200 ? 'Success' : 'Error',
-                description: question.message,
-            })
+        try {
             setLoading(true)
-            reset()
+            const question = await onCreateHelpDeskQuestion(
+                id,
+                values.questions,
+                values.answer
+            )
+            if (question) {
+                setIsQuestions(question.questions!)
+                toast({
+                    title: question.status == 200 ? 'Success' : 'Error',
+                    description: question.message,
+                })
+                reset()
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
         }
     })
 
 
     const onGetQuestions = async () => {
-        setLoading(true)
-        const questions = await onGetAllHelpDeskQuestions(id)
-        if (questions) {
-            setIsQuestions(questions.questions)
+        try {
+            setLoading(true)
+            const questions = await onGetAllHelpDeskQuestions(id)
+            if (questions) {
+                setIsQuestions(questions.questions)
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
             setLoading(false)
         }
     }
@@ -207,7 +217,7 @@ export const useFilterQuestions = (id: string) => {
         formState: { errors },
         reset,
     } = useForm<FilterQuestionsProps>({
-        resolver: zodResolver(FielterQuestionsSchema),
+        resolver: zodResolver(FilterQuestionsSchema),
     })
     const { toast } = useToast()
     const [loading, setLoading] = useState<boolean>(false)
@@ -216,24 +226,37 @@ export const useFilterQuestions = (id: string) => {
     >([])
 
     const onAddFilterQuestions = handleSubmit(async (values) => {
-        setLoading(true)
-        const questions = await onCreateFilterQuestions(id, values.question)
-        if (questions) {
-            setIsQuestions(questions.questions!)
-            toast({
-                title: questions.status == 200 ? 'Success' : 'Error',
-                description: questions.message,
-            })
-            reset()
+        try {
+            setLoading(true)
+            console.log('Submitting filter question', values)
+            const questions = await onCreateFilterQuestions(id, values.question)
+            console.log('Filter questions response', questions)
+            if (questions) {
+                setIsQuestions(questions.questions!)
+                toast({
+                    title: questions.status == 200 ? 'Success' : 'Error',
+                    description: questions.message,
+                })
+                reset()
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
             setLoading(false)
         }
     })
 
-    const onGetQuestions= async()=>{
-        setLoading(true)
-        const questions = await onGetAllFilterQuestions(id)
-        if(questions){
-            setIsQuestions(questions.questions)
+    const onGetQuestions = async () => {
+        try {
+            setLoading(true)
+            const questions = await onGetAllFilterQuestions(id)
+            console.log('Fetched filter questions', questions)
+            if (questions) {
+                setIsQuestions(questions.questions)
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
             setLoading(false)
         }
     }
