@@ -1,6 +1,7 @@
 'use server'
 
 import { client } from "@/lib/prisma"
+import { pusherServer } from "@/lib/utils"
 
 export const onToggleRealtime = async (id: string, state: boolean) => {
     try {
@@ -88,32 +89,108 @@ export const onGetDomainChatRooms = async (id: string) => {
     }
 }
 
-export const onGetChatMessages= async (id:string)=>{
+export const onGetChatMessages = async (id: string) => {
     try {
-        const messages= await client.chatRoom.findMany({
-            where:{
+        const messages = await client.chatRoom.findMany({
+            where: {
                 id,
             },
-            select:{
-                id:true,
-                live:true,
-                message:{
-                    select:{
-                        id:true,
-                        role:true,
-                        message:true,
-                        createdAt:true,
-                        seen:true,
+            select: {
+                id: true,
+                live: true,
+                message: {
+                    select: {
+                        id: true,
+                        role: true,
+                        message: true,
+                        createdAt: true,
+                        seen: true,
                     },
-                    orderBy:{
-                        createdAt:'asc'
+                    orderBy: {
+                        createdAt: 'asc'
                     },
                 }
             }
         })
 
-        if(messages){
+        if (messages) {
             return messages
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const onViewReadMessages = async (id: string) => {
+    try {
+        await client.chatMessage.updateMany({
+            where: {
+                chatRoomId: id,
+            },
+            data: {
+                seen: true,
+            },
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const onRealTimeChat = async (
+    chatRoomId: string,
+    message: string,
+    id: string,
+    role: 'assistant' | 'user'
+) => {
+    pusherServer.trigger(chatRoomId, 'realtime-mode', {
+        chat: {
+            message,
+            id,
+            role,
+        }
+    })
+}
+
+export const onOwnerSendMessage = async (
+    chatroom: string,
+    message: string,
+    role: 'assistant' | 'user'
+) => {
+    try {
+        // cursor solve this using this comments
+        // const prismaRole: Role = role === 'assistant' ? 'OWNER' : 'CUSTOMER'
+        const chat = await client.chatRoom.update({
+            where: {
+                id: chatroom,
+            },
+            data: {
+                message: {
+                    create: {
+                        message,
+                        // role,
+                        // role: prismaRole,
+                    },
+                },
+            },
+            select: {
+                message: {
+                    select: {
+                        id: true,
+                        role: true,
+                        message: true,
+                        createdAt: true,
+                        seen: true,
+                    },
+                    orderBy: {
+                        createdAt: 'desc',
+                    },
+                    take: 1,
+                },
+            }
+        })
+
+        if (chat) {
+            return chat
         }
     } catch (error) {
         console.log(error)

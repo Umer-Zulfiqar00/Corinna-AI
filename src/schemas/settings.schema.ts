@@ -1,7 +1,7 @@
 import {string, z} from 'zod'
 
-const MAX_UPLOAD_SIZE=1024* 1024*2 //2mb
-const ACCEPTED_FILES_TYPES= ['image/png', 'image/jpg', 'image/jpeg']
+export const MAX_UPLOAD_SIZE=1024* 1024*2 //2mb
+export const ACCEPTED_FILES_TYPES= ['image/png', 'image/jpg', 'image/jpeg']
 
 export type DomainsSettingsProps={
     domain? : string
